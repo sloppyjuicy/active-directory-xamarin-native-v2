@@ -23,10 +23,18 @@ namespace UserDetailsClient
             AcquireTokenAsync().ConfigureAwait(false);
         }
 
+        static void Logger(LogLevel level, string message, bool containsPii)
+        {
+            Console.WriteLine($"MSAL {level} {containsPii} {message}");
+        }
+
         public static void CreatePublicClient()
         {
             var builder = PublicClientApplicationBuilder
-                .Create(App.ClientID);
+                .Create(App.ClientID)
+                .WithLogging(Logger, LogLevel.Verbose,
+                       enablePiiLogging: true,
+                       enableDefaultPlatformLogging: true);
                 
             if (UseBroker)
             {                
